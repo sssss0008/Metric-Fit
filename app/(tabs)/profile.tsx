@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors } from '../../src/constants/Colors';
-import { User, FileText, Heart, CreditCard, Bell, Shield, HelpCircle, LogOut, ChevronRight, Activity, Pill, Droplet, ShieldCheck, Smile, MapPin, Utensils, CheckCircle, Users, Star, Truck, BookOpen, Moon, Target } from 'lucide-react-native';
+import { User, FileText, Heart, CreditCard, Bell, Shield, HelpCircle, LogOut, ChevronRight, Activity, Pill, Droplet, ShieldCheck, Smile, MapPin, Utensils, CheckCircle, Users, Star, Truck, BookOpen, Moon, Target, ShieldAlert } from 'lucide-react-native';
 
 export default function ProfileScreen() {
   const router = useRouter();
