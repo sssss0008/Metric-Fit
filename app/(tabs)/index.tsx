@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Image,
 import { useRouter } from 'expo-router';
 import { Colors } from '../../src/constants/Colors';
 import { DOCTORS, CATEGORIES, Doctor } from '../../src/data/mockData';
-import { Search, Bell, MapPin, Star, Calendar, ShieldCheck, Heart, ArrowRight } from 'lucide-react-native';
+import { Search, Bell, MapPin, Star, Calendar, ShieldCheck, Heart, ArrowRight, Activity, FileText, ShoppingBag, BookOpen } from 'lucide-react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function HomeScreen() {
           </View>
           <Text style={styles.greetingTitle}>Hi, Alex 👋</Text>
         </View>
-        <TouchableOpacity style={styles.notificationBtn}>
+        <TouchableOpacity style={styles.notificationBtn} onPress={() => router.push('/notifications')}>
           <Bell color={Colors.text} size={22} />
           <View style={styles.notificationDot} />
         </TouchableOpacity>
@@ -45,6 +45,37 @@ export default function HomeScreen() {
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
+      </View>
+
+      {/* Quick Services Grid */}
+      <View style={styles.quickServicesGrid}>
+        <TouchableOpacity style={styles.quickServiceItem} onPress={() => router.push('/symptoms')}>
+          <View style={[styles.quickServiceIcon, { backgroundColor: '#E0F2FE' }]}>
+            <Activity color="#0284C7" size={22} />
+          </View>
+          <Text style={styles.quickServiceText}>Symptom Checker</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.quickServiceItem} onPress={() => router.push('/pharmacy')}>
+          <View style={[styles.quickServiceIcon, { backgroundColor: '#FEF3C7' }]}>
+            <ShoppingBag color="#D97706" size={22} />
+          </View>
+          <Text style={styles.quickServiceText}>Pharmacy</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.quickServiceItem} onPress={() => router.push('/records')}>
+          <View style={[styles.quickServiceIcon, { backgroundColor: '#D1FAE5' }]}>
+            <FileText color="#059669" size={22} />
+          </View>
+          <Text style={styles.quickServiceText}>Lab Reports</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.quickServiceItem} onPress={() => router.push('/articles')}>
+          <View style={[styles.quickServiceIcon, { backgroundColor: '#EDE9FE' }]}>
+            <BookOpen color="#7C3AED" size={22} />
+          </View>
+          <Text style={styles.quickServiceText}>Health Tips</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Promo Banner */}
@@ -196,6 +227,31 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
     marginBottom: 20,
+  },
+  quickServicesGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+  },
+  quickServiceItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  quickServiceIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  quickServiceText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.text,
+    textAlign: 'center',
   },
   searchIcon: {
     marginRight: 10,

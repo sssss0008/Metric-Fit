@@ -27,13 +27,6 @@ export interface Appointment {
   location?: string;
 }
 
-export interface ChatMessage {
-  id: string;
-  senderId: string;
-  text: string;
-  timestamp: string;
-}
-
 export interface ChatThread {
   id: string;
   doctorId: string;
@@ -43,6 +36,27 @@ export interface ChatThread {
   lastMessage: string;
   lastMessageTime: string;
   unreadCount: number;
+}
+
+export interface HealthArticle {
+  id: string;
+  title: string;
+  category: string;
+  readTime: string;
+  date: string;
+  image: string;
+  content: string;
+  author: string;
+}
+
+export interface PharmacyProduct {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  rating: number;
+  image: string;
+  description: string;
 }
 
 export const CATEGORIES = [
@@ -181,4 +195,85 @@ export const CHAT_THREADS: ChatThread[] = [
     lastMessageTime: 'Yesterday',
     unreadCount: 0,
   },
+];
+
+export const HEALTH_ARTICLES: HealthArticle[] = [
+  {
+    id: 'art-1',
+    title: '10 Essential Tips for Maintaining a Healthy Heart',
+    category: 'Cardiology',
+    readTime: '4 min read',
+    date: 'Sep 6, 2026',
+    image: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&q=80&w=600',
+    author: 'Dr. Jenny Wilson, M.D.',
+    content: 'Heart health is paramount for overall longevity. Regular cardiovascular exercise, a balanced diet rich in omega-3 fatty acids, managing stress levels, and avoiding smoking significantly reduce the risk of heart disease.',
+  },
+  {
+    id: 'art-2',
+    title: 'Understanding Migraines vs. Tension Headaches',
+    category: 'Neurology',
+    readTime: '6 min read',
+    date: 'Sep 4, 2026',
+    image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&q=80&w=600',
+    author: 'Dr. Robert Fox, Ph.D.',
+    content: 'Headaches are common, but distinguishing between migraines and tension headaches helps determine the correct treatment. Migraines often involve throbbing pain, nausea, and light sensitivity.',
+  },
+  {
+    id: 'art-3',
+    title: 'The Importance of Preventive Dental Care',
+    category: 'Dentistry',
+    readTime: '3 min read',
+    date: 'Sep 2, 2026',
+    image: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=600',
+    author: 'Dr. Sarah Johnson, D.D.S.',
+    content: 'Brushing twice daily, flossing, and visiting your dentist every six months prevents gum disease, tooth decay, and maintains a bright, healthy smile.',
+  },
+];
+
+export const PHARMACY_PRODUCTS: PharmacyProduct[] = [
+  {
+    id: 'p-1',
+    name: 'Omega-3 Fish Oil 1000mg',
+    category: 'Supplements',
+    price: 24.99,
+    rating: 4.8,
+    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=400',
+    description: 'Supports heart, brain, and joint health with high-potency EPA and DHA.',
+  },
+  {
+    id: 'p-2',
+    name: 'Vitamin D3 2000 IU',
+    category: 'Vitamins',
+    price: 15.50,
+    rating: 4.9,
+    image: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&q=80&w=400',
+    description: 'Essential for immune support and bone mineralization.',
+  },
+  {
+    id: 'p-3',
+    name: 'Digital Blood Pressure Monitor',
+    category: 'Devices',
+    price: 49.99,
+    rating: 4.7,
+    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=400',
+    description: 'Accurate upper arm blood pressure monitor with Bluetooth sync.',
+  },
+  {
+    id: 'p-4',
+    name: 'Multivitamin Complete Daily',
+    category: 'Vitamins',
+    price: 19.99,
+    rating: 4.8,
+    image: 'https://images.unsplash.com/photo-1550572017-edd951b55104?auto=format&fit=crop&q=80&w=400',
+    description: 'Comprehensive blend of 22 essential vitamins and minerals for daily vitality.',
+  },
+];
+
+export const SYMPTOMS_LIST = [
+  { id: 's-1', name: 'Chest Pain', specialty: 'Cardiologist', icon: 'Heart' },
+  { id: 's-2', name: 'Severe Headache', specialty: 'Neurologist', icon: 'Brain' },
+  { id: 's-3', name: 'Toothache', specialty: 'Dentist', icon: 'Smile' },
+  { id: 's-4', name: 'Joint Pain', specialty: 'Orthopedic', icon: 'Activity' },
+  { id: 's-5', name: 'Skin Rash', specialty: 'Dermatologist', icon: 'Sun' },
+  { id: 's-6', name: 'Fever & Cough', specialty: 'General', icon: 'UserCheck' },
 ];
