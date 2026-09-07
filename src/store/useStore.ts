@@ -12,6 +12,8 @@ interface AppState {
   streak: number;
   lastLogDate: string | null;
   setUnit: (unit: 'metric' | 'imperial') => void;
+  setTheme: (theme: 'dark' | 'light') => void;
+  toggleTheme: () => void;
   updateStreak: () => void;
 }
 
@@ -20,11 +22,15 @@ export const useStore = create<AppState>()(
     (set, get) => ({
       settings: {
         unit: 'metric',
-        theme: 'dark',
+        theme: 'light',
       },
       streak: 0,
       lastLogDate: null,
       setUnit: (unit) => set((state) => ({ settings: { ...state.settings, unit } })),
+      setTheme: (theme) => set((state) => ({ settings: { ...state.settings, theme } })),
+      toggleTheme: () => set((state) => ({
+        settings: { ...state.settings, theme: state.settings.theme === 'light' ? 'dark' : 'light' }
+      })),
       updateStreak: () => {
         const today = new Date().toISOString().split('T')[0];
         const lastDate = get().lastLogDate;
