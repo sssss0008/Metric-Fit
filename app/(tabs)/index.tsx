@@ -1,60 +1,138 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Image, StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors } from '../../src/constants/Colors';
-import { useStore } from '../../src/store/useStore';
-import { Flame, Plus, ClipboardList as TemplateIcon } from 'lucide-react-native';
+import { DOCTORS, CATEGORIES, Doctor } from '../../src/data/mockData';
+import { Search, Bell, MapPin, Star, Calendar, ShieldCheck, Heart, ArrowRight } from 'lucide-react-native';
 
-export default function LoggerScreen() {
+export default function HomeScreen() {
   const router = useRouter();
-  const streak = useStore((state) => state.streak);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const startEmptyWorkout = () => {
-    router.push('/workout/active');
-  };
+  const filteredDoctors = DOCTORS.filter((doc) => {
+    const matchesCat = selectedCategory === 'All' || doc.specialty.toLowerCase() === selectedCategory.toLowerCase();
+    const matchesSearch = doc.name.toLowerCase().includes(searchQuery.toLowerCase()) || doc.specialty.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCat && matchesSearch;
+  });
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
+
+      {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>MetricFit</Text>
-        <View style={styles.streakBadge}>
-          <Flame color={Colors.primary} size={18} />
-          <Text style={styles.streakText}>{streak}-Day Streak</Text>
+        <View>
+          <View style={styles.locationRow}>
+            <MapPin color={Colors.primary} size={14} />
+            <Text style={styles.locationText}>New York, USA</Text>
+          </View>
+          <Text style={styles.greetingTitle}>Hi, Alex 👋</Text>
         </View>
-      </View>
-
-      <View style={styles.metricsSummary}>
-        <View style={styles.metricCard}>
-          <Text style={styles.metricLabel}>Body Weight</Text>
-          <Text style={styles.metricValue}>78.2 kg</Text>
-        </View>
-        <View style={styles.metricCard}>
-          <Text style={styles.metricLabel}>7-Day Volume</Text>
-          <Text style={styles.metricValue}>14,200 kg</Text>
-        </View>
-      </View>
-
-      <Text style={styles.sectionTitle}>QUICK START</Text>
-      <View style={styles.quickStartRow}>
-        <TouchableOpacity style={styles.actionButton} onPress={startEmptyWorkout}>
-          <Plus color={Colors.text} size={20} />
-          <Text style={styles.actionButtonText}>Start Empty Workout</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.actionButton, styles.secondaryButton]}>
-          <TemplateIcon color={Colors.text} size={20} />
-          <Text style={styles.actionButtonText}>Push Day Template</Text>
+        <TouchableOpacity style={styles.notificationBtn}>
+          <Bell color={Colors.text} size={22} />
+          <View style={styles.notificationDot} />
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.sectionTitle}>RECENT LOGS</Text>
-      <View style={styles.logCard}>
-        <Text style={styles.logTitle}>• Bench Press: 4 sets</Text>
-        <Text style={styles.logSub}>PR: 100 kg x 5</Text>
+      {/* Search Bar */}
+      <View style={styles.searchContainer}>
+        <Search color={Colors.textSecondary} size={20} style={styles.searchIcon} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search doctor, symptoms, conditions..."
+          placeholderTextColor={Colors.textSecondary}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
       </View>
-      <View style={styles.logCard}>
-        <Text style={styles.logTitle}>• Squat: 3 sets</Text>
-        <Text style={styles.logSub}>@ 120 kg</Text>
+
+      {/* Promo Banner */}
+      <View style={styles.banner}>
+        <View style={styles.bannerContent}>
+          <View style={styles.bannerBadge}>
+            <ShieldCheck color="#FFFFFF" size={14} />
+            <Text style={styles.bannerBadgeText}>Verified Doctors</Text>
+          </View>
+          <Text style={styles.bannerTitle}>Looking for Specialist Doctors?</Text>
+          <Text style={styles.bannerSubtitle}>Schedule video consultation with top medical experts easily.</Text>
+          <TouchableOpacity style={styles.bannerButton} onPress={() => router.push('/(tabs)/explore')}>
+            <Text style={styles.bannerButtonText}>Consult Now</Text>
+            <ArrowRight color="#FFFFFF" size={16} />
+          </TouchableOpacity>
+        </View>
       </View>
+
+      {/* Categories / Specialties */}
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Categories</Text>
+        <TouchableOpacity onPress={() => router.push('/(tabs)/explore')}>
+          <Text style={styles.seeAllText}>See All</Text>
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoriesContainer}>
+        <TouchableOpacity
+          style={[styles.categoryChip, selectedCategory === 'All' && styles.categoryChipActive]}
+          onPress={() => setSelectedCategory('All')}
+        >
+          <Text style={[styles.categoryText, selectedCategory === 'All' && styles.categoryTextActive]}>All</Text>
+        </TouchableOpacity>
+        {CATEGORIES.map((cat) => (
+          <TouchableOpacity
+            key={cat.id}
+            style={[styles.categoryChip, selectedCategory === cat.name && styles.categoryChipActive]}
+            onPress={() => setSelectedCategory(cat.name)}
+          >
+            <Text style={[styles.categoryText, selectedCategory === cat.name && styles.categoryTextActive]}>{cat.name}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+
+      {/* Top Doctors */}
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Top Doctors</Text>
+        <TouchableOpacity onPress={() => router.push('/(tabs)/explore')}>
+          <Text style={styles.seeAllText}>See All</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.doctorsList}>
+        {filteredDoctors.map((doc) => (
+          <TouchableOpacity
+            key={doc.id}
+            style={styles.doctorCard}
+            onPress={() => router.push(`/doctor/${doc.id}`)}
+          >
+            <Image source={{ uri: doc.image }} style={styles.doctorImage} />
+            <View style={styles.doctorInfo}>
+              <View style={styles.doctorTopRow}>
+                <Text style={styles.doctorName} numberOfLines={1}>{doc.name}</Text>
+                <View style={styles.ratingBadge}>
+                  <Star color="#F59E0B" size={14} fill="#F59E0B" />
+                  <Text style={styles.ratingText}>{doc.rating}</Text>
+                </View>
+              </View>
+              <Text style={styles.doctorSpecialty}>{doc.specialty} • {doc.hospital}</Text>
+
+              <View style={styles.doctorFooter}>
+                <View style={styles.feeContainer}>
+                  <Text style={styles.feeAmount}>${doc.consultationFee}</Text>
+                  <Text style={styles.feeLabel}>/ session</Text>
+                </View>
+                <TouchableOpacity
+                  style={styles.bookButton}
+                  onPress={() => router.push(`/doctor/${doc.id}`)}
+                >
+                  <Text style={styles.bookButtonText}>Book Now</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <View style={{ height: 40 }} />
     </ScrollView>
   );
 }
@@ -63,106 +141,245 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    padding: 16,
+    paddingHorizontal: 20,
+    paddingTop: 16,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 24,
-    marginTop: 8,
+    marginBottom: 20,
+    marginTop: 10,
   },
-  title: {
-    fontSize: 28,
+  locationRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  locationText: {
+    color: Colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '600',
+    marginLeft: 4,
+  },
+  greetingTitle: {
+    fontSize: 24,
     fontWeight: '800',
     color: Colors.text,
   },
-  streakBadge: {
+  notificationBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: Colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  notificationDot: {
+    position: 'absolute',
+    top: 10,
+    right: 12,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.error,
+  },
+  searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.surface,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    height: 52,
     borderWidth: 1,
     borderColor: Colors.border,
+    marginBottom: 20,
   },
-  streakText: {
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
     color: Colors.text,
-    marginLeft: 6,
+    fontSize: 15,
+  },
+  banner: {
+    backgroundColor: Colors.primary,
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 24,
+    overflow: 'hidden',
+  },
+  bannerContent: {
+    maxWidth: '85%',
+  },
+  bannerBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+    alignSelf: 'flex-start',
+    marginBottom: 12,
+    gap: 4,
+  },
+  bannerBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 12,
     fontWeight: '600',
   },
-  metricsSummary: {
+  bannerTitle: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: '800',
+    marginBottom: 8,
+  },
+  bannerSubtitle: {
+    color: 'rgba(255,255,255,0.85)',
+    fontSize: 13,
+    marginBottom: 16,
+    lineHeight: 18,
+  },
+  bannerButton: {
     flexDirection: 'row',
-    gap: 12,
-    marginBottom: 32,
-  },
-  metricCard: {
-    flex: 1,
-    backgroundColor: Colors.card,
-    padding: 16,
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: Colors.border,
+    alignSelf: 'flex-start',
+    gap: 6,
   },
-  metricLabel: {
-    color: Colors.textSecondary,
-    fontSize: 12,
-    marginBottom: 4,
-  },
-  metricValue: {
-    color: Colors.text,
-    fontSize: 18,
+  bannerButtonText: {
+    color: Colors.primary,
     fontWeight: '700',
+    fontSize: 14,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 14,
   },
   sectionTitle: {
-    color: Colors.textSecondary,
-    fontSize: 13,
+    fontSize: 18,
     fontWeight: '700',
-    letterSpacing: 1,
-    marginBottom: 12,
+    color: Colors.text,
   },
-  quickStartRow: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 32,
+  seeAllText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.primary,
   },
-  actionButton: {
-    flex: 1,
-    backgroundColor: Colors.primary,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
-    borderRadius: 12,
-    gap: 8,
+  categoriesContainer: {
+    gap: 10,
+    marginBottom: 24,
   },
-  secondaryButton: {
+  categoryChip: {
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    borderRadius: 24,
     backgroundColor: Colors.surface,
     borderWidth: 1,
     borderColor: Colors.border,
+    marginRight: 4,
   },
-  actionButtonText: {
-    color: Colors.text,
-    fontWeight: '700',
+  categoryChipActive: {
+    backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
+  },
+  categoryText: {
+    color: Colors.textSecondary,
+    fontWeight: '600',
     fontSize: 14,
   },
-  logCard: {
-    backgroundColor: Colors.card,
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
+  categoryTextActive: {
+    color: '#FFFFFF',
+  },
+  doctorsList: {
+    gap: 14,
+  },
+  doctorCard: {
+    flexDirection: 'row',
+    backgroundColor: Colors.surface,
+    borderRadius: 16,
+    padding: 14,
     borderWidth: 1,
     borderColor: Colors.border,
+    alignItems: 'center',
   },
-  logTitle: {
-    color: Colors.text,
+  doctorImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 14,
+    backgroundColor: Colors.border,
+  },
+  doctorInfo: {
+    flex: 1,
+    marginLeft: 14,
+  },
+  doctorTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  doctorName: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
+    color: Colors.text,
+    flex: 1,
   },
-  logSub: {
+  ratingBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FEF3C7',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
+    gap: 4,
+  },
+  ratingText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#92400E',
+  },
+  doctorSpecialty: {
+    fontSize: 13,
     color: Colors.textSecondary,
-    fontSize: 14,
-    marginTop: 4,
+    marginBottom: 12,
+  },
+  doctorFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  feeContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+  },
+  feeAmount: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: Colors.primary,
+  },
+  feeLabel: {
+    fontSize: 11,
+    color: Colors.textSecondary,
+    marginLeft: 2,
+  },
+  bookButton: {
+    backgroundColor: Colors.primaryLight,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  bookButtonText: {
+    color: Colors.primary,
+    fontWeight: '700',
+    fontSize: 13,
   },
 });
