@@ -1,15 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, StatusBar } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Colors } from '../../src/constants/Colors';
-import { User, FileText, Heart, CreditCard, Bell, Shield, HelpCircle, LogOut, ChevronRight } from 'lucide-react-native';
+import { User, FileText, Heart, CreditCard, Bell, Shield, HelpCircle, LogOut, ChevronRight, Activity, Pill, Droplet, ShieldCheck, Smile, MapPin, Utensils, CheckCircle, Users, Star, Truck } from 'lucide-react-native';
 
 export default function ProfileScreen() {
+  const router = useRouter();
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
 
       <View style={styles.header}>
-        <Text style={styles.title}>Profile</Text>
+        <Text style={styles.title}>Profile & Features</Text>
       </View>
 
       {/* User Info Card */}
@@ -43,62 +46,109 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* Menu Sections */}
-      <View style={styles.menuSection}>
-        <Text style={styles.sectionTitle}>Medical Records</Text>
-        <TouchableOpacity style={styles.menuItem}>
-          <View style={[styles.menuIconBox, { backgroundColor: '#E0F2FE' }]}>
-            <FileText color="#0284C7" size={20} />
-          </View>
-          <Text style={styles.menuText}>My Prescriptions & Reports</Text>
-          <ChevronRight color={Colors.textSecondary} size={18} />
-        </TouchableOpacity>
+      {/* Emergency Feature */}
+      <TouchableOpacity style={styles.emergencyBanner} onPress={() => router.push('/emergency')}>
+        <Truck color="#FFFFFF" size={24} />
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <Text style={styles.emergencyTitle}>Emergency SOS & Ambulance</Text>
+          <Text style={styles.emergencySub}>Tap for immediate emergency dispatch</Text>
+        </View>
+      </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem}>
+      {/* Advanced Features Menu */}
+      <View style={styles.menuSection}>
+        <Text style={styles.sectionTitle}>Health & Clinical Features</Text>
+
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/vitals')}>
           <View style={[styles.menuIconBox, { backgroundColor: '#FEE2E2' }]}>
-            <Heart color="#DC2626" size={20} />
+            <Activity color="#DC2626" size={20} />
           </View>
-          <Text style={styles.menuText}>Favorite Doctors</Text>
+          <Text style={styles.menuText}>Health Vitals & BMI Calculator</Text>
           <ChevronRight color={Colors.textSecondary} size={18} />
         </TouchableOpacity>
-      </View>
 
-      <View style={styles.menuSection}>
-        <Text style={styles.sectionTitle}>Settings & Preferences</Text>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/medications')}>
+          <View style={[styles.menuIconBox, { backgroundColor: '#E0F2FE' }]}>
+            <Pill color="#0284C7" size={20} />
+          </View>
+          <Text style={styles.menuText}>Medication & Pill Reminder</Text>
+          <ChevronRight color={Colors.textSecondary} size={18} />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/blood-bank')}>
+          <View style={[styles.menuIconBox, { backgroundColor: '#FEE2E2' }]}>
+            <Droplet color="#DC2626" size={20} />
+          </View>
+          <Text style={styles.menuText}>Blood Donation Bank</Text>
+          <ChevronRight color={Colors.textSecondary} size={18} />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/insurance')}>
+          <View style={[styles.menuIconBox, { backgroundColor: '#D1FAE5' }]}>
+            <ShieldCheck color="#059669" size={20} />
+          </View>
+          <Text style={styles.menuText}>Health Insurance Policy</Text>
+          <ChevronRight color={Colors.textSecondary} size={18} />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/mental-health')}>
+          <View style={[styles.menuIconBox, { backgroundColor: '#EDE9FE' }]}>
+            <Smile color="#7C3AED" size={20} />
+          </View>
+          <Text style={styles.menuText}>Mental Health & Meditation</Text>
+          <ChevronRight color={Colors.textSecondary} size={18} />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/hospitals')}>
+          <View style={[styles.menuIconBox, { backgroundColor: '#FEF3C7' }]}>
+            <MapPin color="#D97706" size={20} />
+          </View>
+          <Text style={styles.menuText}>Hospitals & Clinics Near Me</Text>
+          <ChevronRight color={Colors.textSecondary} size={18} />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/diet')}>
+          <View style={[styles.menuIconBox, { backgroundColor: '#D1FAE5' }]}>
+            <Utensils color="#059669" size={20} />
+          </View>
+          <Text style={styles.menuText}>Diet & Nutrition Plan</Text>
+          <ChevronRight color={Colors.textSecondary} size={18} />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/vaccines')}>
+          <View style={[styles.menuIconBox, { backgroundColor: '#E0F2FE' }]}>
+            <CheckCircle color="#0284C7" size={20} />
+          </View>
+          <Text style={styles.menuText}>Vaccination Records</Text>
+          <ChevronRight color={Colors.textSecondary} size={18} />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/family')}>
+          <View style={[styles.menuIconBox, { backgroundColor: '#EDE9FE' }]}>
+            <Users color="#7C3AED" size={20} />
+          </View>
+          <Text style={styles.menuText}>Family Health Profiles</Text>
+          <ChevronRight color={Colors.textSecondary} size={18} />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/billing')}>
           <View style={[styles.menuIconBox, { backgroundColor: '#FEF3C7' }]}>
             <CreditCard color="#D97706" size={20} />
           </View>
-          <Text style={styles.menuText}>Payment Methods</Text>
+          <Text style={styles.menuText}>Medical Bills & Invoices</Text>
           <ChevronRight color={Colors.textSecondary} size={18} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem}>
-          <View style={[styles.menuIconBox, { backgroundColor: '#D1FAE5' }]}>
-            <Bell color="#059669" size={20} />
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/reviews')}>
+          <View style={[styles.menuIconBox, { backgroundColor: '#FEE2E2' }]}>
+            <Star color="#DC2626" size={20} />
           </View>
-          <Text style={styles.menuText}>Notifications</Text>
-          <ChevronRight color={Colors.textSecondary} size={18} />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.menuItem}>
-          <View style={[styles.menuIconBox, { backgroundColor: '#EDE9FE' }]}>
-            <Shield color="#7C3AED" size={20} />
-          </View>
-          <Text style={styles.menuText}>Privacy & Security</Text>
-          <ChevronRight color={Colors.textSecondary} size={18} />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.menuItem}>
-          <View style={[styles.menuIconBox, { backgroundColor: '#F1F5F9' }]}>
-            <HelpCircle color="#64748B" size={20} />
-          </View>
-          <Text style={styles.menuText}>Help & Support</Text>
+          <Text style={styles.menuText}>Doctor Reviews & Feedback</Text>
           <ChevronRight color={Colors.textSecondary} size={18} />
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.logoutBtn}>
+      <TouchableOpacity style={styles.logoutBtn} onPress={() => router.push('/')}>
         <LogOut color={Colors.error} size={20} />
         <Text style={styles.logoutText}>Log Out</Text>
       </TouchableOpacity>
@@ -170,7 +220,7 @@ const styles = StyleSheet.create({
   statsRow: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 24,
+    marginBottom: 20,
   },
   statCard: {
     flex: 1,
@@ -191,6 +241,24 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.textSecondary,
     fontWeight: '600',
+  },
+  emergencyBanner: {
+    flexDirection: 'row',
+    backgroundColor: Colors.error,
+    borderRadius: 16,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  emergencyTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    marginBottom: 2,
+  },
+  emergencySub: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.9)',
   },
   menuSection: {
     marginBottom: 24,
