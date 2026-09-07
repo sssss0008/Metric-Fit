@@ -2,6 +2,7 @@
   "expo": {
     "name": "Metric-Fit",
     "slug": "Metric-Fit",
+    "scheme": "metric-fit",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
